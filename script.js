@@ -1,4 +1,66 @@
+function initializeValueCards() {
+  document.querySelectorAll(".values-flip-grid .card").forEach((card, index) => {
+    const heading = card.querySelector("h4");
+    const details = card.querySelector("p");
+    const faces = document.createElement("div");
+    const button = document.createElement("button");
+    let isHovered = false;
+
+    heading.id ||= `value-heading-${index + 1}`;
+    details.id ||= `value-details-${index + 1}`;
+    heading.classList.add("value-card-front");
+    details.classList.add("value-card-back");
+
+    faces.className = "value-card-faces";
+    faces.append(heading, details);
+
+    button.type = "button";
+    button.className = "value-card-toggle";
+    button.setAttribute("aria-labelledby", heading.id);
+    button.setAttribute("aria-controls", details.id);
+
+    card.classList.add("value-card");
+    card.append(faces, button);
+
+    function setFlipped(isFlipped) {
+      card.classList.toggle("is-flipped", isFlipped);
+      button.setAttribute("aria-expanded", String(isFlipped));
+      details.setAttribute("aria-hidden", String(!isFlipped));
+    }
+
+    setFlipped(false);
+
+    card.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "touch") return;
+      isHovered = true;
+      setFlipped(true);
+    });
+
+    card.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "touch") return;
+      isHovered = false;
+      if (!button.matches(":focus-visible")) setFlipped(false);
+    });
+
+    button.addEventListener("focus", () => {
+      if (button.matches(":focus-visible")) setFlipped(true);
+    });
+
+    button.addEventListener("blur", () => {
+      if (!isHovered) setFlipped(false);
+    });
+
+    button.addEventListener("click", () => {
+      setFlipped(button.getAttribute("aria-expanded") !== "true");
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setFlipped(false);
+    });
+  });
+}
 function initializeWebsite() {
+  initializeValueCards();
   const toggle = document.querySelector(".menu-toggle");
   const navLinks = document.querySelector(".nav-links");
 

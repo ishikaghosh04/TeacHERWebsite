@@ -602,3 +602,62 @@ h4 {
     grid-template-columns: 1fr;
   }
 }
+.value-card {
+  position: relative;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  perspective: 900px;
+}
+
+.value-card-faces {
+  display: grid;
+  height: 100%;
+  min-height: 12rem;
+  transform-style: preserve-3d;
+  transition: transform 450ms ease;
+}
+
+.value-card.is-flipped .value-card-faces {
+  transform: rotateY(180deg);
+}
+
+.value-card .value-card-front,
+.value-card .value-card-back {
+  display: grid;
+  grid-area: 1 / 1;
+  align-content: center;
+  margin: 0;
+  padding: 1.8rem;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 1.2rem;
+  backface-visibility: hidden;
+}
+
+.value-card-front {
+  background: var(--white);
+  text-align: center;
+}
+
+.value-card-back {
+  background: var(--blush);
+  transform: rotateY(180deg);
+}
+
+.value-card-toggle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .value-card-faces {
+    transition: none;
+  }
+}
